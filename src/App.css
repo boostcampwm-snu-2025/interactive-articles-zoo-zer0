@@ -1,10 +1,17 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  margin: 0;
   text-align: center;
 }
-
+.dropcap {
+  float: left;
+  font-weight: 900;
+  font-size: 3rem;                      /* adjust */
+  line-height: 0.8;
+  padding-left: -0.05em;
+  padding-right: 0.01em;
+  padding-top: 0.01em;
+  color:#204281;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -17,6 +24,45 @@
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+.scrolly{
+  margin: auto;
+  max-width: 1280px;
+}
+.scrolly-narrative{
+  margin-top: -80vh;
+  justify-items: left;
+}
+.scrolly-narrative.center{
+  justify-items: center;
+}
+.sticky{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 50px;
+}
+.scroll-box{
+  width: 320px;
+  background-color: rgba(255, 255, 255, 0.904);
+  color: rgb(86, 85, 94);
+  text-align:left;
+  padding: 0 1em;
+  border: 2px solid rgb(172, 172, 172);
+  margin: 75vh 0;
+  z-index: 10;
+  position: relative;
+}
+.scroll-box.active{
+  box-shadow: 0 4px 16px #3a3a3a73;
+}
+
+.highlight{
+    background-color: #446db8;
+    border-radius: 5px;
+    padding: 0px 5px;
+    color:aliceblue;
+    display: inline-block;
+}
+
 
 @keyframes logo-spin {
   from {
