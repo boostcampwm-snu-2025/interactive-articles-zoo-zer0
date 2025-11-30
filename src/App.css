@@ -54,6 +54,11 @@
 .scroll-box.active{
   box-shadow: 0 4px 16px #3a3a3a73;
 }
+#throwaway{
+  opacity: 0;
+  width: 0;
+
+}
 
 .highlight{
     background-color: #446db8;

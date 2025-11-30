@@ -112,6 +112,9 @@ const TreeScrollyTelling = () =>{
                 </>
             )
         },
+        {id: 9, focus: "edge", source: "allReviews",
+            content:(<></>)
+        }
     ];
     
     const onStepEnter = ({ data })=>{
@@ -127,7 +130,7 @@ const TreeScrollyTelling = () =>{
                 <Scrollama offset={0.4} onStepEnter={onStepEnter}>
                     {stepsData.map((step, index)=>(
                         <Step data={index} key={index}>
-                            <div className= {activeStep === index ? "scroll-box active" : "scroll-box"}>
+                            <div className= {activeStep === index ? "scroll-box active" : "scroll-box"} id={index===9 ? "throwaway":""}>
                                 {step.content}
                             </div>
                         </Step>
