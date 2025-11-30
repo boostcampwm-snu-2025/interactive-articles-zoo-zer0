@@ -23,6 +23,18 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
     const treeLayout = d3.tree().size([width, height]);
     const rootNode = d3.hierarchy(data);
     treeLayout(rootNode);
+    rootNode.sort((a,b)=>{
+        const aVal = a.data.femaleParticipation !== undefined
+            ? a.data.femaleParticipation
+            : a.data["per women"] !== undefined 
+            ? a.data["per women"] / 100 : 0;
+        const bVal = b.data.femaleParticipation !== undefined
+            ? b.data.femaleParticipation
+            : b.data["per women"] !== undefined 
+            ? b.data["per women"] / 100 : 0;
+
+        return bVal - aVal; // descending order
+    })
     setRoot(rootNode);
 
     // --- Color scales ---
@@ -136,7 +148,7 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
         .duration(800)
         .call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
     }
-
+    
     // expose for external use (like scrollama)
     svg.node().focusNode = focusNode;
     svg.node().rootNode = rootNode;
@@ -150,7 +162,20 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
     const svg = d3.select(svgRef.current);
     const g = svg.select("g");
 
-    if (focusNodeID === "allReviews") {
+    if (focusStep === "allReviews") {
+        function adjustTreeHeight(maxDepth, op=0.1){
+        nodes
+            .transition().duration(500)
+            .style("opacity", d => d.depth <= maxDepth ? 1 : op); // dim or hide
+
+        links
+            .transition().duration(500)
+            .style("opacity", d => {
+                return (d.source.depth <= maxDepth - 1 && d.target.depth <= maxDepth)
+                    ? 1
+                    : op;
+            });
+    }
         // special "allReviews" behavior
         adjustTreeHeight(4); // dim/hide nodes beyond depth 4
         const center = averageNodeDepth(rootNode, 2, 3); // average coordinates

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Scrollama, Step } from 'react-scrollama';
 import TreeVisualization from "./TreeVisualization";
+import data from "./data.json";
+
 const TreeScrollyTelling = () =>{
     
     const [activeStep, setActiveStep] = useState(null);
@@ -111,46 +113,15 @@ const TreeScrollyTelling = () =>{
             )
         },
     ];
-/*
-    state = {
-        focus: "",
-        source: "",
-        screenWidth: 0,
-        screenHeight: 0
-    }
-*/    
+    
     const onStepEnter = ({ data })=>{
         setActiveStep(data);
-            if (!treeRef.current || !treeRef.current.focusNode) return;
-
-        const step = stepsData[data];
-        if (step.focus === "node") {
-        const node = treeRef.current.rootNode?.descendants().find(d => d.data.id === step.source);
-        if (node) treeRef.current.focusNode(node);
-        } else if (step.focus === "edge") {
-        const edge = treeRef.current.rootNode?.links().find(l => l.target.data.id === step.source);
-        if (edge) treeRef.current.focusNode(edge);
-        }
     };
-    
 
-    //apply useEffect only when updating visualization
-/*    useEffect(() => {
-        if (activeStep === null) return;
-
-        const { focus, source } = stepsData[activeStep];
-
-        updateVisualization({
-            focus,
-            source
-        });
-
-    }, [activeStep]);
-*/
     return(
         <div className="scrolly">
             <div className="sticky">
-                <TreeVisualization ref={treeRef} data = {data} focusStep={activeStep != null ? stepsData[activeStep].source : null} focusType={activeStep != null ? stepsData[activeStep].focus : null} />
+                <TreeVisualization data={data} focusStep={activeStep != null ? stepsData[activeStep].source : null} focusType={activeStep != null ? stepsData[activeStep].focus : null} />
             </div>
             <div className="scrolly-narrative">
                 <Scrollama offset={0.4} onStepEnter={onStepEnter}>
