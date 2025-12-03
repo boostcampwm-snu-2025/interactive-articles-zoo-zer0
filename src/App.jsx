@@ -29,7 +29,7 @@ function App() {
       <Narrative content={
         <>
           <p>
-            <span className="dropcap">C</span>old plunge content is everywhere on my <em>For You Page</em>. It seems like I’m not alone, as Google searches for <span class="highlight">“cold plunge”</span> have surged by <strong><span class="highlight">3862.5%</span></strong> since 2020. On YouTube, TikTok, Instagram, and Reddit, cold plunging has gone from niche recovery ritual to mainstream “biohack”.
+            <span className="dropcap">C</span>old plunge content is everywhere on my <em>For You Page</em>. It seems like I’m not alone, as Google searches for <span className="highlight">“cold plunge”</span> have surged by <strong><span className="highlight">3862.5%</span></strong> since 2020. On YouTube, TikTok, Instagram, and Reddit, cold plunging has gone from niche recovery ritual to mainstream “biohack”.
           </p>
           <p>
             Endorsed by celebrities and my favorite wellness influencers, cold plunging is said to offer benefits like enhanced recovery, boosted mood, and weight loss, supposedly backed up by scientific research and numerous controlled trials.
@@ -73,7 +73,6 @@ function App() {
         </>
       }/>
       <SourcesScrollytelling />
-      <ScrollamaDemo />
     </>
     
   )

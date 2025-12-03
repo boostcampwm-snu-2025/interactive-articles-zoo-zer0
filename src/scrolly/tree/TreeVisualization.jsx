@@ -5,14 +5,14 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
   const svgRef = useRef(null);
   const [root, setRoot] = useState(null);
   const zoomRef = useRef(null);
-  const selectionsRef = useRef({ nodes: null, links: null });
+  const selectionsRef = useRef({ nodes: null, links: null, linkStroke: null });
   
   useEffect(() => {
     if (!data) return;
 
     // --- SVG setup ---
-    const width = 1600;
-    const height = 2400;
+    const width = 2100;
+    const height = 2500;
     const svg = d3.select(svgRef.current)
       .attr("width", width)
       .attr("height", height)
@@ -53,67 +53,86 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
       negative: "#c40d00ff",
       neutral: "#9E9E9E"
     };
+      
+    //aesthetic links
+    function drawTaperedLinkVertical(d, startRadius = 1.5, endRadius = 7, samples = 20) {
+      const linkGen = d3.linkVertical()
+        .x(p => p.x)
+        .y(p => p.y);
 
-    // --- Tooltip ---
-    const tooltipG = svg.append("g")
-      .attr("class", "tooltip-g")
-      .style("opacity", 0)
-      .style("pointer-events", "none");
+      // 1. Get the path as SVG string
+      const pathStr = linkGen(d);
 
-    tooltipG.append("rect")
-      .attr("fill", "white")
-      .attr("stroke", "#999")
-      .attr("rx", 6)
-      .attr("ry", 6)
-      .attr("width", 220)
-      .attr("height", 90)
-      .attr("opacity", 0.9);
+      // 2. Convert path string to SVG Path object to sample points
+      const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      pathEl.setAttribute("d", pathStr);
+      const totalLen = pathEl.getTotalLength();
 
-    const tooltipText = tooltipG.append("text")
-      .attr("x", 10)
-      .attr("y", 20)
-      .attr("font-size", 12)
-      .attr("fill", "#333");
+      // 3. Sample points along the path
+      const points = [];
+      for (let i = 0; i <= samples; i++) {
+        const t = i / samples;
+        const pt = pathEl.getPointAtLength(t * totalLen);
+        points.push({ x: pt.x, y: pt.y });
+      }
 
-    function showTooltip(d) {
-      const html = `${d.data.type || "Unknown"}: ${d.data.Title || "No title"}`;
-      tooltipText.text(html);
-      tooltipG.transition().duration(150).style("opacity", 1)
-        .attr("transform", `translate(${d.x + 10},${d.y - 10})`);
+      // 4. Build polygon with perpendicular offsets
+      const left = [];
+      const right = [];
+      const n = points.length;
+
+      points.forEach((p, i) => {
+        // linear radius from start → end
+        const radius = startRadius + ((endRadius - startRadius) * i) / (n - 1);
+
+        // compute tangent
+        let dx, dy;
+        if (i < n - 1) {
+          dx = points[i + 1].x - p.x;
+          dy = points[i + 1].y - p.y;
+        } else {
+          dx = p.x - points[i - 1].x;
+          dy = p.y - points[i - 1].y;
+        }
+
+        const len = Math.sqrt(dx * dx + dy * dy);
+        const px = -dy / len;
+        const py = dx / len;
+
+        left.push([p.x + px * radius, p.y + py * radius]);
+        right.push([p.x - px * radius, p.y - py * radius]);
+      });
+
+      // 5. Combine left + reversed right to make polygon
+      const polygon = left.concat(right.reverse());
+      return "M" + polygon.map(p => p.join(",")).join(" L") + " Z";
     }
 
-    function hideTooltip() {
-      tooltipG.transition().duration(200).style("opacity", 0);
-    }
-
-
-    // --- Links ---
-    const links = g.selectAll(".edge")
-      .data(rootNode.links())
+  // --- Links ---
+    //stroke layer
+    let linkStroke = g.selectAll(".edge-stroke")
+      .data(rootNode.links(), d=> d.target.data.id)
       .join("path")
-      .attr("class", "edge")
+      .attr("class", "edge-stroke")
+      .attr("id", d=>`edge-stroke-${d.target.data.id}`)
       .attr("d", d3.linkVertical().x(d => d.x).y(d => d.y))
       .attr("stroke", d => sentimentColor[d.target.data.sentiment] || "#999")
       .attr("stroke-width", 1.5)
-      .attr("fill", "none")
-      .on("mouseover", (event, d) => showTooltip(d.target))
-      .on("mouseout", hideTooltip);
-
+      .attr("fill", "none");
+    const links = g.selectAll(".edge-tapered")
+      .data(rootNode.links(), d=> d.target.data.id)
+      .join("path")
+      .attr("class", "edge-tapered")
+      .attr("d", d => drawTaperedLinkVertical(d, 1.5, d.target.depth === 3 ? 7 : 10))
+      .attr("fill", d => sentimentColor[d.target.data.sentiment] || "none")
+      .attr('fill-opacity', 0.2);
     // --- Nodes ---
     const nodes = g.selectAll(".node")
       .data(rootNode.descendants())
       .join("g")
       .attr("class", "node")
       .attr("transform", d => `translate(${d.x},${d.y})`)
-      .style("cursor", d => (d.depth === 1 || d.data.link ? "pointer" : "default"))
-      .on("mouseover", (event, d) => showTooltip(d))
-      .on("mouseout", hideTooltip)
-      .on("click", (event, d) => {
-        if (d.data.link) {
-          window.open(d.data.link, "_blank");
-        }
-      });
-
+      .style("cursor", d => (d.depth === 1 || d.data.link ? "pointer" : "default"));
     nodes.append("circle")
       .attr("r", d => (d.depth === 3 ? 7 : 10))
       .attr("fill", d => {
@@ -124,11 +143,106 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
         }
         return "#ffdd46ff";
       });
-
     // Store selections for later use
-    selectionsRef.current = { nodes, links };
 
-    // --- Zoom ---
+    selectionsRef.current = { nodes, links, linkStroke };
+    
+    // --- Tooltip ---
+    const tooltip = d3
+      .select("body")
+      .append("div")
+      .attr("class", "tree-tooltip")
+      .style("position", "absolute")
+      .style("padding", "10px")
+      .style("background", "rgba(0, 0, 0, 0.8)")
+      .style("color", "white")
+      .style("border-radius", "8px")
+      .style("font-size", "13px")
+      .style("pointer-events", "none")
+      .style("width", "100%")
+      .style("max-width", "300px")
+      .style("opacity", 0);
+    function showTooltip(event, htmlContent){
+            //d3.select(this).attr("stroke-width, 2.5");
+            tooltip.transition().duration(150).style("opacity",1);
+            tooltip.html(htmlContent)
+                .style("left",(event.pageX+15) + "px")
+                .style("top",(event.pageY - 20)+"px");//can i do depending on whether event is mouseover or if it's not
+        }
+        
+    function moveTooltip(event) {
+        tooltip
+            .style("left", (event.pageX + 15) + "px")
+            .style("top", (event.pageY - 20) + "px");
+        }
+
+    function hideTooltip() {
+        tooltip.transition().duration(200).style("opacity", 0);
+        }    
+    // edge hovers: Attach hover to tapered polygons
+    links
+      .on("mouseover", function (event, d) {
+        // Make the top stroke thicker
+        d3.select(`#edge-stroke-${d.target.data.id}`)// match the same data
+          .attr("stroke-width", 4.5);
+
+        const sentiment = d.target.data.sentiment || "N/A";
+        const quote = d.target.data.quote || "No quote";
+
+        showTooltip(
+          event,
+          `<b>Sentiment:</b> ${sentiment}<br/><b>Quote:</b> ${quote}`
+        );
+      })
+      .on("mousemove", moveTooltip)
+      .on("mouseout", function (event, d) {
+        // Reset top stroke width
+        d3.select(`#edge-stroke-${d.target.data.id}`)// match the same data
+          .attr("stroke-width", 1.5); // match original stroke width
+
+        hideTooltip();
+      });
+    
+        nodes
+            .on("mouseover", function (event, d) {
+            d3.select(this).select("circle").attr("stroke", "#9E9E9E").attr("stroke-width", 2);
+            const type = d.data.type || "Unknown";
+            const femaleParticipation =
+                d.data.femaleParticipation !== undefined
+                ? `${Math.round(d.data.femaleParticipation * 100)}%`
+                : d.data["per women"] !== undefined
+                ? `${d.data["per women"]}%`
+                : null;
+            const title = d.data.citation || d.data.Title || "No title available";
+            const doi = d.data.doi ? `<a href="${d.data.doi}" target="_blank">DOI Link</a><br>` : "";
+            const screenshot = d.data.screenshot
+                ? `<img src="${d.data.screenshot}" alt="screenshot" style="max-width:100%; height:auto; border-radius:8px;"/>`
+                : "";
+            const fp = femaleParticipation ? `Female Participation: ${femaleParticipation}<br>` : "";
+
+            showTooltip(
+                event,
+                `<span class="highlight">${type}</span><br><strong>${title}</strong><br>${fp}${doi}${screenshot}`
+            );
+            })
+            .on("mousemove", moveTooltip)
+            .on("mouseout", function () {
+            d3.select(this).select("circle").attr("stroke", null).attr("stroke-width", 0);
+            hideTooltip();
+            })
+            // [MERGE] Interactive clicking: open links on leaves, toggle focus on parents
+            .style("cursor", d => (d.depth === 1 || d.data.link ? "pointer" : "default"))
+            .on("click", function (event, d) {
+            if (d.data && d.data.link && d.depth >= 2) {
+                window.open(d.data.link, "_blank");
+                return;
+            }
+            if (d.depth === 1) {
+                toggleParentFocus(d);
+            }
+            });    
+    
+      // --- Zoom ---
     
     const zoom = d3.zoom()
       .scaleExtent([0.1, 3])
@@ -220,6 +334,12 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
         .style("opacity", d => {
           return (d.source.depth <= maxDepth - 1 && d.target.depth <= maxDepth) ? 1 : opacity;
         });
+      selectionsRef.current.linkStroke
+        .transition()
+        .duration(500)
+        .style("opacity", d => {
+          return (d.source.depth <= maxDepth - 1 && d.target.depth <= maxDepth) ? 1 : opacity;
+        });
     }
 
     // Show only one parent and its children
@@ -246,6 +366,18 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
         });
 
       selectionsRef.current.links
+        .transition()
+        .duration(500)
+        .style("opacity", d => {
+          // Show link to parent
+          if (d.target.data.id === parentId) return 1;
+          // Show links to children
+          if (childrenIds.has(d.target.data.id)) return 1;
+          // Show links to grandchildren
+          if (d.source.data.id && childrenIds.has(d.source.data.id)) return 1;
+          return hideOthersOpacity;
+        });
+      selectionsRef.current.linkStroke
         .transition()
         .duration(500)
         .style("opacity", d => {
@@ -303,8 +435,11 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
     if (focusType === "node") {
       const node = findNodeById(root, focusStep);
       if (!node) return;
-
       const transform = transformFor(node, 1.6);
+      
+      svg.interrupt();
+      svg.call(zoom.transform, d3.zoomTransform(svg.node()));
+      
       svg.transition()
         .duration(1000)
         .call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale));
@@ -326,6 +461,7 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
         // control transformFor by margin, not zoom scale
         //DONE
         const transform = transformEdge(root, 0, 1, 100);
+        
         svg.transition()
           .duration(1000)
           .call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale));

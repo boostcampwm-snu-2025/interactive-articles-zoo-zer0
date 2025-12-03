@@ -9,7 +9,7 @@ const SourcesScrollytelling = () =>{
             content: (
                 <>
                     <p>
-                    Stepping outside the headlines, I collected <b>426</b> PubMed articles, with abstracts available, that conducted clinical and randomized trials, tagged <span class="highlight">“cold-water-immersion”.</span>
+                    Stepping outside the headlines, I collected <b>426</b> PubMed articles, with abstracts available, that conducted clinical and randomized trials, tagged <span className="highlight">“cold-water-immersion”.</span>
                     </p>
                 </>
             )
@@ -38,11 +38,11 @@ const SourcesScrollytelling = () =>{
                     <p>
                         And out of 212 studies,
                         <br></br>
-                        <br></br><span class="highlight boy-blue">143</span> consisted only of men,
-                        <span class="highlight">69</span> had both male and female participants,
-                        <br></br>and only <span class="highlight girl-pink">11</span> were female-focused studies.
+                        <br></br><span className="highlight boy-blue">143</span> consisted only of men,
+                        <span className="highlight">69</span> had both male and female participants,
+                        <br></br>and only <span className="highlight girl-pink">11</span> were female-focused studies.
                         <br></br>
-                        <br></br>Additionally, <span class="highlight gray">13</span> did not include any information about the gender of participants.
+                        <br></br>Additionally, <span className="highlight gray">13</span> did not include any information about the gender of participants.
                     </p>
                 </>
             )

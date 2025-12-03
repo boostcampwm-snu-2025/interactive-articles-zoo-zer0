@@ -71,13 +71,13 @@ const TreeScrollyTelling = () =>{
                         Each cold-water-immersion trial (a controlled experiment designed to test specific effects) is represented as a dot, colored on a scale from 
                         <span style={{backgroundColor:"#a7e3ffff", color: "black"}} className= "highlight boy-blue">blue</span>  
                         to 
-                        <span style={{backgroundColor:"#b80090"}} class="highlight girl-pink">pink</span>: 
+                        <span style={{backgroundColor:"#b80090"}} className="highlight">pink</span>: 
                         the pinker the dot, the greater the female participation rate.
                     </p>
                     <p>
                         You’ll notice a sea of blue dots. Out of those 52 studies, I had access to 32 trials. And out of those 32 trials, 
                         <br></br>
-                        <strong><span class="highlight">22</span> excluded women entirely.</strong>
+                        <strong><span className="highlight">22</span> excluded women entirely.</strong>
                     </p>
                 </>
             )
@@ -98,7 +98,7 @@ const TreeScrollyTelling = () =>{
                     Let’s look at the 2025 review article looking into the doses of cold water immersion, which analyzes 55 studies. I could access 31 trials. 
                 </p>
                 <p>
-                    And out of those 31 trials, <span class="highlight">23</span> excluded women entirely.
+                    And out of those 31 trials, <span className="highlight">23</span> excluded women entirely.
                 </p>
                 </>
             )
@@ -128,7 +128,7 @@ const TreeScrollyTelling = () =>{
                 <TreeVisualization data={data} focusStep={activeStep != null ? stepsData[activeStep].source : null} focusType={activeStep != null ? stepsData[activeStep].focus : null} />
             </div>
             <div className="scrolly-narrative">
-                <Scrollama offset={0.4} onStepEnter={onStepEnter}>
+                <Scrollama offset={0.5} onStepEnter={onStepEnter}>
                     {stepsData.map((step, index)=>(
                         <Step data={index} key={index}>
                             <div className= {activeStep === index ? "scroll-box active" : "scroll-box"} id={index===9 ? "throwaway":""}>
