@@ -6,13 +6,13 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
   const [root, setRoot] = useState(null);
   const zoomRef = useRef(null);
   const selectionsRef = useRef({ nodes: null, links: null });
-
+  
   useEffect(() => {
     if (!data) return;
 
     // --- SVG setup ---
     const width = 1600;
-    const height = 1600;
+    const height = 2400;
     const svg = d3.select(svgRef.current)
       .attr("width", width)
       .attr("height", height)
@@ -22,7 +22,7 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
     const g = svg.append("g");
 
     // --- Tree layout ---
-    const treeLayout = d3.tree().size([width - 100, height - 100]);
+    const treeLayout = d3.tree().size([width-100, height-100]);
     const rootNode = d3.hierarchy(data);
     
     // Sort before layout
@@ -86,6 +86,7 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
       tooltipG.transition().duration(200).style("opacity", 0);
     }
 
+
     // --- Links ---
     const links = g.selectAll(".edge")
       .data(rootNode.links())
@@ -128,15 +129,20 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
     selectionsRef.current = { nodes, links };
 
     // --- Zoom ---
+    
     const zoom = d3.zoom()
       .scaleExtent([0.1, 3])
+      .filter(event => {
+        // Disable all user-initiated zoom/pan events
+        // Only allow programmatic zoom via zoom.transform
+        return false;
+      })
       .on("zoom", event => {
         g.attr("transform", event.transform);
       });
     
     svg.call(zoom);
     zoomRef.current = zoom;
-
     // --- Helper functions ---
     
     // Find node by id
@@ -145,15 +151,7 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
     }
 
     // Calculate average position of nodes at specific depths
-    function averageNodeDepth(root, minDepth, maxDepth) {
-      const targetNodes = root.descendants().filter(d => d.depth >= minDepth && d.depth <= maxDepth);
-      if (targetNodes.length === 0) return root;
-      
-      const avgX = targetNodes.reduce((sum, n) => sum + n.x, 0) / targetNodes.length;
-      const avgY = targetNodes.reduce((sum, n) => sum + n.y, 0) / targetNodes.length;
-      
-      return { x: avgX, y: avgY };
-    }
+
 
     // Transform calculation for centering
     function transformFor(target, scale = 1) {
@@ -168,6 +166,46 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
       
       return { tx, ty, scale };
     }
+    function transformEdge(root, minDepth, maxDepth, margin=50){
+      const nodes = root.descendants().filter(
+        d=>d.depth >=minDepth && d.depth <=maxDepth
+      );
+      if (nodes.length===0) return {tx:0, ty:0, scale:1};
+      
+      const minX = d3.min(nodes, d=>d.x);
+      const maxX = d3.max(nodes, d=>d.x);
+      const avgX = (minX + maxX) / 2;
+
+      
+      const minY = d3.min(nodes, d=>d.y);
+      const maxY = d3.max(nodes, d=>d.y);
+      const avgY = (minY + maxY) / 2;
+
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      //bounds of depth range
+      
+      //scaledMinY should be at margin,
+      //scaledMaxY should be at viewportHeight-margin
+      // -> scale = availableViewportHeight / dataHeight
+      const dataHeight = maxY - minY;
+      const availableHeight = viewportHeight - margin *2;
+
+      //main scale
+      let scale = availableHeight / dataHeight;
+      
+      //just in case all nodes don't show up:
+      
+      const xScale = viewportWidth / (maxX-minX);
+      if (xScale<scale){
+        scale = xScale;
+      }
+
+      const tx = viewportWidth / 2 - avgX * scale;
+      const ty = viewportHeight / 2 - avgY * scale;
+      return { tx, ty, scale };
+    } 
 
     // Adjust tree visibility by depth
     function adjustTreeHeight(maxDepth, opacity = 0.1) {
@@ -224,11 +262,10 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
     // Store functions on SVG node for external access
     svg.node().rootNode = rootNode;
     svg.node().findNodeById = findNodeById;
-    svg.node().averageNodeDepth = averageNodeDepth;
     svg.node().transformFor = transformFor;
     svg.node().adjustTreeHeight = adjustTreeHeight;
     svg.node().showOneParent = showOneParent;
-
+    svg.node().transformEdge = transformEdge;
     // Initial position: start at root, everything hidden
     const initialTransform = transformFor(rootNode, 1);
     adjustTreeHeight(0, 0);
@@ -244,19 +281,18 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
     const zoom = zoomRef.current;
     
     const findNodeById = svg.node().findNodeById;
-    const averageNodeDepth = svg.node().averageNodeDepth;
     const transformFor = svg.node().transformFor;
     const adjustTreeHeight = svg.node().adjustTreeHeight;
     const showOneParent = svg.node().showOneParent;
-
+    const transformEdge = svg.node().transformEdge;
     if (!findNodeById) return;
 
     // Handle special "allReviews" case
     if (focusStep === "allReviews") {
       adjustTreeHeight(4);
-      const target = averageNodeDepth(root, 2, 3);
-      const transform = transformFor(target, 0.7);
-      
+      //const transform = transformFor(target, 0.7);
+      const transform = transformEdge(root, 2, 3, 120);
+
       svg.transition()
         .duration(1000)
         .call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale));
@@ -268,7 +304,7 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
       const node = findNodeById(root, focusStep);
       if (!node) return;
 
-      const transform = transformFor(node, 1);
+      const transform = transformFor(node, 1.6);
       svg.transition()
         .duration(1000)
         .call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale));
@@ -277,7 +313,8 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
     }
 
     // Handle edge focus (show parent and its children)
-    if (focusType === "edge") {
+    if (focusType === "edge") { 
+      //focusStep is source id
       const parentNode = findNodeById(root, focusStep);
       if (!parentNode) return;
 
@@ -285,40 +322,32 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
       if (focusStep === 0) {
         // Step 1: Show root and first level
         adjustTreeHeight(1, 0);
-        const target = averageNodeDepth(root, 0, 1);
-        const transform = transformFor(target, 0.7);
+        //TODO: transform to center 
+        // control transformFor by margin, not zoom scale
+        //DONE
+        const transform = transformEdge(root, 0, 1, 100);
         svg.transition()
           .duration(1000)
           .call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale));
       } else if (focusStep === 1) {
         // Step 3: Show one parent (EveryDay Health)
         showOneParent(parentNode, 0.1);
-        const target = averageNodeDepth(root, 1, 2);
-        const transform = transformFor(target, 0.8);
+        const transform = transformEdge(root, 1, 2, 100);
         svg.transition()
           .duration(1000)
           .call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale));
-      } else if (focusStep === 14) {
+      } else if (focusStep === 14 || focusStep === 6) {
         // Step 5: Show specific review and its trials
         showOneParent(parentNode, 0.1);
-        const target = averageNodeDepth(root, 2, 3);
-        const transform = transformFor(target, 0.9);
-        svg.transition()
-          .duration(1000)
-          .call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale));
-      } else if (focusStep === 6) {
-        // Step 7: Show different review
-        showOneParent(parentNode, 0);
-        const target = averageNodeDepth(root, 2, 3);
-        const transform = transformFor(target, 0.9);
+        const transform = transformEdge(root, 2, 3, 60);
+
         svg.transition()
           .duration(1000)
           .call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale));
       } else {
         // Default edge behavior
         showOneParent(parentNode, 0.1);
-        const target = averageNodeDepth(root, parentNode.depth, parentNode.depth + 1);
-        const transform = transformFor(target, 0.9);
+        const transform = transformEdge(root, parentNode.depth, parentNode.depth+1);
         svg.transition()
           .duration(1000)
           .call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale));
@@ -327,5 +356,5 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
 
   }, [focusStep, focusType, root]);
 
-  return <svg ref={svgRef} style={{ width: "100%", height: "100vh" }}></svg>;
+  return <svg ref={svgRef} style={{width:"100%", height:"100vh"}}></svg>;
 }

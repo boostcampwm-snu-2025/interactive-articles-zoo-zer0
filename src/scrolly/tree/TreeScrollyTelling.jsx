@@ -119,6 +119,7 @@ const TreeScrollyTelling = () =>{
     
     const onStepEnter = ({ data })=>{
         setActiveStep(data);
+        console.log(data);
     };
 
     return(
