@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Scrollama, Step } from 'react-scrollama';
+import SourcesVisualization from "./SourcesVisualization";
+import data from "./data.json";
 
 const SourcesScrollytelling = () =>{
     
@@ -72,9 +74,9 @@ const SourcesScrollytelling = () =>{
     return(
         <div className="scrolly">
             <div className="sticky">
-                <button>click me</button>
+                <SourcesVisualization data={data} step={activeStep != null ? stepsData[activeStep].id : null}/>
             </div>
-            <div className="scrolly-narrative">
+            <div className="scrolly-narrative center">
                 <Scrollama offset={0.4} onStepEnter={onStepEnter}>
                     {stepsData.map((step, index)=>(
                         <Step data={index} key={index}>

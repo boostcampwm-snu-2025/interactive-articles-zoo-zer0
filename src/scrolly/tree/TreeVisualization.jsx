@@ -5,14 +5,16 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
   const svgRef = useRef(null);
   const [root, setRoot] = useState(null);
   const zoomRef = useRef(null);
-  const selectionsRef = useRef({ nodes: null, links: null, linkStroke: null });
+  const selectionsRef = useRef({ nodes: null, links: null, linkStroke: null, nodeLabel: null });
   
   useEffect(() => {
     if (!data) return;
 
     // --- SVG setup ---
     const width = 2100;
-    const height = 2500;
+    const height = 2800; // keep original 2100x2500 aspect ratio
+
+
     const svg = d3.select(svgRef.current)
       .attr("width", width)
       .attr("height", height)
@@ -107,6 +109,78 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
       const polygon = left.concat(right.reverse());
       return "M" + polygon.map(p => p.join(",")).join(" L") + " Z";
     }
+//helper: wraptext
+function wrapText(text, width) {
+  text.each(function () {
+    const textEl = d3.select(this);
+
+    // --- NEW: Split text by <br> to force line breaks ---
+    const paragraphs = textEl.text().split(/<br\s*\/?>/i);
+
+    textEl.text(null); // clear
+
+    let lineNumber = 0;
+    const lineHeight = 1.2; // em
+    const y = textEl.attr("y") || 0;
+    const dy = parseFloat(textEl.attr("dy") || 0);
+
+    paragraphs.forEach((paragraph, pIndex) => {
+      // split paragraph into words
+      let words = paragraph.trim().split(/\s+/).reverse();
+      let line = [];
+
+      let tspan = textEl.append("tspan")
+        .attr("x", 0)
+        .attr("y", y)
+        .attr("dy", (lineNumber * lineHeight + dy) + "em");
+
+      let word;
+      while ((word = words.pop())) {
+        line.push(word);
+        tspan.text(line.join(" "));
+
+        if (tspan.node().getComputedTextLength() > width) {
+          line.pop();
+          tspan.text(line.join(" "));
+          line = [word];
+
+          tspan = textEl.append("tspan")
+            .attr("x", 0)
+            .attr("y", y)
+            .attr("dy", (++lineNumber * lineHeight + dy) + "em")
+            .text(word);
+        }
+      }
+
+      // after finishing a paragraph, force next line for next <br>
+      if (pIndex < paragraphs.length - 1) {
+        lineNumber++;
+      }
+    });
+  });
+}
+function addTextBackground(g, color = "white",padding = 4) {
+  g.each(function () {
+    const group = d3.select(this);
+
+    // Select the text element inside this <g>
+    const text = group.select("text");
+
+    // Get bounding box after tspans are created
+    const bbox = text.node().getBBox();
+
+    // Insert a rectangle BEFORE the text so it's behind it
+    group.insert("rect", "text")
+      .attr("x", bbox.x - padding)
+      .attr("y", bbox.y - padding)
+      .attr("width", bbox.width + padding * 2)
+      .attr("height", bbox.height + padding * 2)
+      .attr("fill", `${color}`)
+      .attr("opacity", 0.8)
+      .attr("rx", 4); // rounded corners optional
+  });
+}
+
 
   // --- Links ---
     //stroke layer
@@ -126,6 +200,30 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
       .attr("d", d => drawTaperedLinkVertical(d, 1.5, d.target.depth === 3 ? 7 : 10))
       .attr("fill", d => sentimentColor[d.target.data.sentiment] || "none")
       .attr('fill-opacity', 0.2);
+    let linkLabel = g.selectAll(".edge-label")
+      .data(rootNode.links(), d=>d.target.data.id)
+      .join("g")
+      .attr("class", "edge-label")
+      .attr("id", d=>`edge-label-${d.target.data.id}`)
+      .attr("transform", d=>{
+        const mx = (d.source.x + d.target.x) / 2;
+        const my = (d.source.y + d.target.y) /2;
+        return `translate(${mx},${my})`;
+      })
+      .attr("display", "none")
+      //.style("opacity",0)
+      let linkText = linkLabel.append("text")
+      .style("font-size","24px")
+      //.attr("text-anchor", "middle")
+      .text(d=>d.target.data.quote || "N/A")
+      .call(wrapText, 600);
+      linkLabel.call(addTextBackground);
+/* if i want link labels to be colored based on sentiment
+linkLabel.each(function(d) {
+  const color = sentimentColor[d.target.data.sentiment] || "none";
+  d3.select(this).call(addTextBackground, color);
+});
+*/
     // --- Nodes ---
     const nodes = g.selectAll(".node")
       .data(rootNode.descendants())
@@ -143,9 +241,53 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
         }
         return "#ffdd46ff";
       });
+    let nodeLabel = g.selectAll(".node-label")
+      .data(rootNode.descendants(), d=>d.data.id)
+      .join("g")
+      .attr("id", d=>`node-label-${d.data.id}`)
+      .attr("class", "node-label")
+      .attr("transform", d => `translate(${d.x},${d.y})`)
+      //.style("opacity", 0)
+      .attr("display", "none")
+
+      let nodeText = nodeLabel.append("text")
+      .text(d=>d.data.Title || d.data.citation || "null")
+      .attr("text-anchor", "middle")
+      .attr("dy", 3)
+      .style("font-size","12px")
+      .call(wrapText,200);
+    nodeLabel.call(addTextBackground);
     // Store selections for later use
 
-    selectionsRef.current = { nodes, links, linkStroke };
+    selectionsRef.current = { nodes, links, linkStroke, nodeLabel, linkLabel, nodeText, linkText };
+    //show labels
+   function showLinkLabel(id){
+      
+      d3.select(`#edge-label-${id}`)// match the same data
+        .transition().duration(1200)  
+        //.style("opacity",1);
+      .attr("display", "block")
+
+    }    
+    function showNodeLabel(id){
+      
+      d3.select(`#node-label-${id}`)// match the same data
+        .transition().duration(1200)  
+        //.style("opacity",1);
+        .attr("display", "block")
+
+    }
+    function hideLabels(id){
+      d3.selectAll(".node-label, .edge-label")
+        .transition()
+        .duration(1000)
+        .attr("display", "none")
+
+        //.style("opacity", 0);
+    }
+
+        
+    
     
     // --- Tooltip ---
     const tooltip = d3
@@ -161,13 +303,15 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
       .style("pointer-events", "none")
       .style("width", "100%")
       .style("max-width", "300px")
-      .style("opacity", 0);
+      .style("display", "none")
+      //.style("opacity", 0);
     function showTooltip(event, htmlContent){
             //d3.select(this).attr("stroke-width, 2.5");
-            tooltip.transition().duration(150).style("opacity",1);
+            tooltip.transition().duration(150)
+            .style("display", "block")
+            //.style("opacity",1);
             tooltip.html(htmlContent)
                 .style("left",(event.pageX+15) + "px")
-                .style("top",(event.pageY - 20)+"px");//can i do depending on whether event is mouseover or if it's not
         }
         
     function moveTooltip(event) {
@@ -177,7 +321,10 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
         }
 
     function hideTooltip() {
-        tooltip.transition().duration(200).style("opacity", 0);
+        tooltip.transition().duration(200)
+        //.style("display","none")
+        .style("display", "none")
+        //.style("opacity", 0);
         }    
     // edge hovers: Attach hover to tapered polygons
     links
@@ -242,7 +389,8 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
             }
             });    
     
-      // --- Zoom ---
+    
+    // --- Zoom ---
     
     const zoom = d3.zoom()
       .scaleExtent([0.1, 3])
@@ -258,7 +406,8 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
     svg.call(zoom);
     zoomRef.current = zoom;
     // --- Helper functions ---
-    
+
+
     // Find node by id
     function findNodeById(root, id) {
       return root.descendants().find(d => d.data.id === id);
@@ -341,7 +490,6 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
           return (d.source.depth <= maxDepth - 1 && d.target.depth <= maxDepth) ? 1 : opacity;
         });
     }
-
     // Show only one parent and its children
     function showOneParent(parentNode, hideOthersOpacity = 0.1) {
       if (!parentNode) return;
@@ -389,15 +537,21 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
           if (d.source.data.id && childrenIds.has(d.source.data.id)) return 1;
           return hideOthersOpacity;
         });
+      //labels
+      
     }
 
     // Store functions on SVG node for external access
+    
     svg.node().rootNode = rootNode;
     svg.node().findNodeById = findNodeById;
     svg.node().transformFor = transformFor;
     svg.node().adjustTreeHeight = adjustTreeHeight;
     svg.node().showOneParent = showOneParent;
     svg.node().transformEdge = transformEdge;
+    svg.node().showNodeLabel = showNodeLabel;
+    svg.node().hideLabels = hideLabels;
+    svg.node().showLinkLabel = showLinkLabel;
     // Initial position: start at root, everything hidden
     const initialTransform = transformFor(rootNode, 1);
     adjustTreeHeight(0, 0);
@@ -417,10 +571,14 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
     const adjustTreeHeight = svg.node().adjustTreeHeight;
     const showOneParent = svg.node().showOneParent;
     const transformEdge = svg.node().transformEdge;
+    const showNodeLabel = svg.node().showNodeLabel;
+    const hideLabels = svg.node().hideLabels;
+    const showLinkLabel = svg.node().showLinkLabel;
     if (!findNodeById) return;
 
     // Handle special "allReviews" case
     if (focusStep === "allReviews") {
+      hideLabels();
       adjustTreeHeight(4);
       //const transform = transformFor(target, 0.7);
       const transform = transformEdge(root, 2, 3, 120);
@@ -443,12 +601,15 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
       svg.transition()
         .duration(1000)
         .call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale));
-      
-      return;
+        hideLabels();
+        showNodeLabel(focusStep);
+        return;
     }
 
     // Handle edge focus (show parent and its children)
     if (focusType === "edge") { 
+      hideLabels();
+
       //focusStep is source id
       const parentNode = findNodeById(root, focusStep);
       if (!parentNode) return;
@@ -457,17 +618,19 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
       if (focusStep === 0) {
         // Step 1: Show root and first level
         adjustTreeHeight(1, 0);
+        showLinkLabel(1);
+
         //TODO: transform to center 
         // control transformFor by margin, not zoom scale
         //DONE
         const transform = transformEdge(root, 0, 1, 100);
-        
         svg.transition()
           .duration(1000)
           .call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale));
       } else if (focusStep === 1) {
         // Step 3: Show one parent (EveryDay Health)
         showOneParent(parentNode, 0.1);
+        showLinkLabel(14);
         const transform = transformEdge(root, 1, 2, 100);
         svg.transition()
           .duration(1000)
@@ -480,7 +643,10 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
         svg.transition()
           .duration(1000)
           .call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale));
-      } else {
+        if(focusStep===6){
+          showNodeLabel(6);
+        }
+        } else {
         // Default edge behavior
         showOneParent(parentNode, 0.1);
         const transform = transformEdge(root, parentNode.depth, parentNode.depth+1);
