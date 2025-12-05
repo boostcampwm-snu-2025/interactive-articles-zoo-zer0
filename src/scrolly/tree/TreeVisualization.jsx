@@ -11,9 +11,12 @@ export default function TreeVisualization({ data, focusStep, focusType }) {
     if (!data) return;
 
     // --- SVG setup ---
-    const width = 2100;
-    const height = 2800; // keep original 2100x2500 aspect ratio
-
+    let width = 2100;
+    let height = 2800; 
+    const ratio = window.innerWidth/window.innerHeight;
+    if (ratio<1){
+      height = height*(1/ratio)
+    }
 
     const svg = d3.select(svgRef.current)
       .attr("width", width)
@@ -638,7 +641,7 @@ linkLabel.each(function(d) {
       } else if (focusStep === 14 || focusStep === 6) {
         // Step 5: Show specific review and its trials
         showOneParent(parentNode, 0.1);
-        const transform = transformEdge(root, 2, 3, 60);
+        const transform = transformEdge(root, 2, 3, 20);
 
         svg.transition()
           .duration(1000)

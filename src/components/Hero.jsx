@@ -32,9 +32,9 @@ export default function Hero() {
           color:"white",
           width:"100%"
         }}>
-      <h1 style={{textShadow:"2px 2px 2px #0d47a1",color: "#ccf7ffff",fontSize:"6vw", marginBlock:0}}>Cold Plunges for Him</h1>
-      <h2 style={{color:"#92d9ffff",margin:0,fontWeight:"normal"}}>When the For You Page Isn’t for Me</h2>
-      <p style={{color: "#ccf7ffff",margin:"10px"}}>By <strong>Joo-young Hyun</strong></p>
+      <h1 style={{textShadow:"2px 2px 2px #0d47a1",color: "#ccf7ffff",fontSize:"8vw", marginBlock:0}}>Cold Plunges for Him</h1>
+      <h2 style={{color:"#92d9ffff",margin:0,fontWeight:"normal",fontSize:"4vw"}}>When the For You Page Isn’t for Me</h2>
+      <p style={{color: "#ccf7ffff",margin:"10px", fontSize:"2vw"}}>By <strong>Joo-young Hyun</strong></p>
       </div>
     </div>
   );

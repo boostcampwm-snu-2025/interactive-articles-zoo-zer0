@@ -94,3 +94,8 @@
 .read-the-docs {
   color: #888;
 }
+@media (max-width:375px){
+  .scroll-box{
+  width: 70vw;
+}
+}

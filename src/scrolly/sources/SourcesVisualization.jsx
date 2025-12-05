@@ -11,8 +11,12 @@ export default function SourcesVisualization({ data, step }) {
   const TOTAL = 426;
   const REMOVED = 214;
   const FINAL = 212;
-  const W = 600;
-  const blockSize = 20;
+  let W = 600;
+  let blockSize = 20;
+  if (W>window.innerWidth){
+    W=window.innerWidth*0.9;
+    blockSize = W/30;
+  }
   const stackHeight = 25;
   const H = blockSize*(stackHeight+1);
   const femaleColorScale = d3.scaleLinear()

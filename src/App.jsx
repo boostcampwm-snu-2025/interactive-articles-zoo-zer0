@@ -3,29 +3,13 @@ import './App.css'
 import Narrative from './Narrative'
 import Hero from './components/Hero'
 
-import ScrollamaDemo from './scrolly/test'
 import TreeScrollyTelling from './scrolly/tree/TreeScrollyTelling'
 import SourcesScrollytelling from './scrolly/sources/SourcesScrollytelling'
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
       <Hero />
-    <div
-      style={{
-        position: "fixed",
-        left: "50%",
-        top: 0,
-        transform: "translateX(-50%)",
-        height: "100vh",
-        borderLeft: `2px dashed black`,
-        // make dashed dash length adjustable in px
-        pointerEvents: "none", // don't block interactions
-        zIndex: 9999,
-        boxSizing: "border-box",
-      }}
-    />
       <Narrative content={
         <>
           <p>
@@ -73,6 +57,29 @@ function App() {
         </>
       }/>
       <SourcesScrollytelling />
+      <Narrative content ={
+        <>
+          <h2>Beyond Who Was Studied: What Was Tested?</h2>
+
+  <p>
+    Knowing <em>who</em> was included in cold water immersion research is only part of the story. 
+    The equally important question is: <strong>what exactly were researchers testing for?</strong>  
+    Beyond merely “Were women included?”, but “Does this specific method help <em>me</em> with <em>my specific needs</em>?”
+  </p>
+
+  <p>To explore this, studies were categorized along two dimensions<sup>1</sup>:</p>
+  <ul>
+    <li><strong>Method of cold therapy:</strong> full-body immersion, partial immersion, cryotherapy with nitrogen air, hot water immersion, and other variations.</li>
+    <li><strong>Intended effect:</strong> outcomes such as muscle recovery, athletic performance, diet, pain perception, clinical treatment, and more.</li>
+  </ul>
+  <p style={{textAlign:"right",color:"#666", fontSize:"0.8em"}}>
+    <strong><sup>1</sup>Note on methodology:</strong> These categories were developed after manually reviewing all 11 of the female-only research papers. 
+    A random sample of 59 additional studies was then categorized, for a total of 70. 
+    Studies with methods or effects outside the listed groups were classified as "etc."
+    The heatmap therefore reflects only this subset of the 212 available studies.
+  </p>
+        </>
+      }/>
     </>
     
   )
