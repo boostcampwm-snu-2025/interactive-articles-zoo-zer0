@@ -2,7 +2,8 @@ import { useState } from 'react'
 import './App.css'
 import Narrative from './Narrative'
 import Hero from './components/Hero'
-
+import data from './components/data.json'
+import ExperimentDesign from './components/experimentDesign/ExperimentDesign'
 import TreeScrollyTelling from './scrolly/tree/TreeScrollyTelling'
 import SourcesScrollytelling from './scrolly/sources/SourcesScrollytelling'
 function App() {
@@ -10,6 +11,7 @@ function App() {
   return (
     <>
       <Hero />
+      <ExperimentDesign data={data}/>
       <Narrative content={
         <>
           <p>
@@ -59,7 +61,7 @@ function App() {
       <SourcesScrollytelling />
       <Narrative content ={
         <>
-          <h2>Beyond Who Was Studied: What Was Tested?</h2>
+          <h2 style={{marginTop:"-75vh"}}>Beyond Who Was Studied: What Was Tested?</h2>
 
   <p>
     Knowing <em>who</em> was included in cold water immersion research is only part of the story. 
@@ -77,6 +79,91 @@ function App() {
     A random sample of 59 additional studies was then categorized, for a total of 70. 
     Studies with methods or effects outside the listed groups were classified as "etc."
     The heatmap therefore reflects only this subset of the 212 available studies.
+  </p>
+        </>
+      }/>
+    <ExperimentDesign data={data} gendered={false}/>
+    <Narrative content={
+      <>
+        <p>
+    Even within the same category, results often disagree. For example:
+  </p>
+
+  <blockquote>
+  <p>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/31652109/" target="_blank">
+      Cold-Water Immersion Does Not Accelerate Performance Recovery After 10-km Street Run: Randomized Controlled Clinical Trial, 2019
+    </a>
+  </p>
+  <p>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/27786541/" target="_blank">
+      Postexercise cold-water immersion improves intermittent high-intensity exercise performance in normothermia, 2016
+    </a>
+  </p>
+</blockquote>
+
+  <p>
+    Both of these trials examined whole-body cold-water immersion for athletic performance, yet they reached opposite conclusions. 
+    Differences in conditions—temperature, duration, or even interpretation—likely explain the contrast. 
+    This is the normal process of science: individual studies may conflict, but over time the body of work evolves, refining its methods and producing more nuanced insights.
+  </p>
+      </>}/>
+      <ExperimentDesign data={data} gendered={true}/>
+      <Narrative content={
+        <>
+          <p>
+    When we layer on sex representation, the imbalance becomes stark. 
+    Whole-body cold water immersion and cryotherapy—the two most common methods when influencers mention a "cold plunge routine"—are overwhelmingly male-focused. 
+    By contrast, 7 out of the 11 female-only studies observed the effects of partial-body immersion.
+  </p>
+
+  <p>
+    Female-only research often begins from scratch. As the few rare female-only studies state:
+  </p>
+
+  <blockquote>
+  <p>
+    “To our knowledge,<strong> no study </strong>has examined the physiological responses or the recovery between PBC, CWI, and a control treatment in <strong>females</strong>.” 
+    <br></br>
+    <span class="source">
+      <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7027844/" target="_blank">
+        Partial‐body cryotherapy (−135°C) and cold‐water immersion (10°C) after muscle damage in females, 2020</a>
+    </span>
+  </p>
+
+  <p>
+    “To our knowledge, existing studies have <strong>only been conducted on male subjects.</strong> Female participants are <strong>significantly underrepresented</strong> in sports and exercise medicine research, including studies related to CWI and HWI.”  
+    <br></br>
+    <span class="source">
+      <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12057877/" target="_blank">
+        No acceleration of recovery from exercise-induced muscle damage after cold or hot water immersion in women: A randomised controlled trial, 2020</a>
+    </span>
+  </p>
+</blockquote>
+
+
+  <p>
+    Because there’s so little historical foundation, even a single new study is often the “first” of its kind, 
+    which makes it difficult to establish nuanced recommendations, like optimal temperatures, durations, or mechanisms, for women’s bodies.
+  </p>
+
+  <p>
+    Entire method and effect categories have <strong>no female-focused studies at all</strong>. 
+    For example, no research on female-focused research exists regarding cold immersion for hyperthermia treatment, sleep, or key physiological mechanisms like vasodilation, oxygenation, and parasympathetic activity, despite these being widely used terminology in wellness media. 
+    Moreover, when studies do discuss such mechanisms in their introduction, supported citations are older research that mostly reflect male physiology. 
+  
+    <span class="source">
+      <a href="https://pubmed.ncbi.nlm.nih.gov/8891513/" target="_blank">
+        Change in sympathetic activity, cardiovascular functions and plasma hormone concentrations due to cold water immersion in men, 1997
+    </a>
+    </span>
+  </p>
+
+  <p>
+    So while cold plunging spreads virally through celebrity culture and wellness newsletters, 
+    the underlying research base reflects a much deeper gender skew. 
+    And this imbalance is not unique to cold therapy: it mirrors a broader underrepresentation of female participants in sports and exercise medicine. 
+    Which means when I ask, <em>“Is cold plunging good for me?”</em>—the most honest answer is still: <strong>we don’t know yet.</strong>
   </p>
         </>
       }/>
