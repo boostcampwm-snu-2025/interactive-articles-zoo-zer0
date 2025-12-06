@@ -52,12 +52,19 @@ const SourcesScrollytelling = () =>{
         { id: 4,
             content: (
                 <>
-                    <p>
-                        (add something about %)
-                    </p>
-                    <p>
-                        A <strong><span style={{backgroundColor:"#ffaf80ff", color: "black"}} className="highlight orange">review paper</span></strong> is a type of scientific study that analyzes findings on a single topic by synthesizing results from multiple previous studies, represented here as an orange dot.
-                    </p>
+<p>
+  In terms of percentage, that's
+  <br></br>
+  <span className="highlight boy-blue">67.5%</span> men-only studies,
+  <br />
+  <span style={{backgroundColor:"#9d92d1ff"}} className="highlight">32.5%</span> mixed-gender,
+  and only 
+  <br></br>
+  <span className="highlight girl-pink">5.2%</span> focused on women.
+  <br /><br />
+  Meanwhile, <span className="highlight gray">6.1%</span> didn’t report gender at all.
+</p>
+                    
                 </>
             )
         },

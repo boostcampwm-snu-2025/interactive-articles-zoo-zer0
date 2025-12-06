@@ -2,20 +2,20 @@ import { useState } from 'react'
 import './App.css'
 import Narrative from './Narrative'
 import Hero from './components/Hero'
-import data from './components/data.json'
+import experimentdata from './components/experimentDesign/data.json'
 import ExperimentDesign from './components/experimentDesign/ExperimentDesign'
 import TreeScrollyTelling from './scrolly/tree/TreeScrollyTelling'
 import SourcesScrollytelling from './scrolly/sources/SourcesScrollytelling'
+import TimeScrollytelling from './scrolly/time/TimeScrollytelling'
 function App() {
 
   return (
     <>
       <Hero />
-      <ExperimentDesign data={data}/>
       <Narrative content={
         <>
           <p>
-            <span className="dropcap">C</span>old plunge content is everywhere on my <em>For You Page</em>. It seems like I’m not alone, as Google searches for <span className="highlight">“cold plunge”</span> have surged by <strong><span className="highlight">3862.5%</span></strong> since 2020. On YouTube, TikTok, Instagram, and Reddit, cold plunging has gone from niche recovery ritual to mainstream “biohack”.
+            <span className="dropcap">C</span>old plunge content is everywhere on my <em>For You Page</em>. It seems like I’m not alone, as Google searches for <span className="highlight">“cold plunge”</span> have surged by <strong><span className="highlight">3862.5%</span></strong> since 2020. On YouTube, TikTok, and Instagram, cold plunging has gone from niche recovery ritual to mainstream “biohack”.
           </p>
           <p>
             Endorsed by celebrities and my favorite wellness influencers, cold plunging is said to offer benefits like enhanced recovery, boosted mood, and weight loss, supposedly backed up by scientific research and numerous controlled trials.
@@ -82,7 +82,7 @@ function App() {
   </p>
         </>
       }/>
-    <ExperimentDesign data={data} gendered={false}/>
+    <ExperimentDesign data={experimentdata} gendered={false}/>
     <Narrative content={
       <>
         <p>
@@ -108,7 +108,7 @@ function App() {
     This is the normal process of science: individual studies may conflict, but over time the body of work evolves, refining its methods and producing more nuanced insights.
   </p>
       </>}/>
-      <ExperimentDesign data={data} gendered={true}/>
+      <ExperimentDesign data={experimentdata} gendered={true}/>
       <Narrative content={
         <>
           <p>
@@ -125,19 +125,15 @@ function App() {
   <p>
     “To our knowledge,<strong> no study </strong>has examined the physiological responses or the recovery between PBC, CWI, and a control treatment in <strong>females</strong>.” 
     <br></br>
-    <span class="source">
-      <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7027844/" target="_blank">
+      <a style={{textAlign:"right", fontSize:"0.8em"}} href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7027844/" target="_blank">
         Partial‐body cryotherapy (−135°C) and cold‐water immersion (10°C) after muscle damage in females, 2020</a>
-    </span>
   </p>
 
   <p>
     “To our knowledge, existing studies have <strong>only been conducted on male subjects.</strong> Female participants are <strong>significantly underrepresented</strong> in sports and exercise medicine research, including studies related to CWI and HWI.”  
     <br></br>
-    <span class="source">
-      <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12057877/" target="_blank">
+      <a style={{textAlign:"right", fontSize:"0.8em"}} href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12057877/" target="_blank">
         No acceleration of recovery from exercise-induced muscle damage after cold or hot water immersion in women: A randomised controlled trial, 2020</a>
-    </span>
   </p>
 </blockquote>
 
@@ -151,12 +147,10 @@ function App() {
     Entire method and effect categories have <strong>no female-focused studies at all</strong>. 
     For example, no research on female-focused research exists regarding cold immersion for hyperthermia treatment, sleep, or key physiological mechanisms like vasodilation, oxygenation, and parasympathetic activity, despite these being widely used terminology in wellness media. 
     Moreover, when studies do discuss such mechanisms in their introduction, supported citations are older research that mostly reflect male physiology. 
-  
-    <span class="source">
-      <a href="https://pubmed.ncbi.nlm.nih.gov/8891513/" target="_blank">
+        <br></br>
+      <a style={{textAlign:"right", fontSize:"0.8em"}} href="https://pubmed.ncbi.nlm.nih.gov/8891513/" target="_blank">
         Change in sympathetic activity, cardiovascular functions and plasma hormone concentrations due to cold water immersion in men, 1997
     </a>
-    </span>
   </p>
 
   <p>
@@ -165,8 +159,30 @@ function App() {
     And this imbalance is not unique to cold therapy: it mirrors a broader underrepresentation of female participants in sports and exercise medicine. 
     Which means when I ask, <em>“Is cold plunging good for me?”</em>—the most honest answer is still: <strong>we don’t know yet.</strong>
   </p>
+  <h2>The Timeline of Cold Plunge Science</h2>
         </>
       }/>
+      <TimeScrollytelling/>
+      <Narrative content={<>
+            <p style={{marginTop:"-75vh"}}>
+Raised awareness of the lack of female-centered research in cold water immersion is part of a larger reckoning in sports and exercise science. Recent studies not only acknowledge that women have long been underrepresented, they also explain why: the technical difficulty of accounting for hormonal variability across the menstrual cycle. But if that variability is large enough to complicate experimental design, it’s also large enough to matter in practice. In other words, the very thing used as a reason to exclude women is itself evidence that we need more research—not less.
+
+    </p>
+Progress is happening. In July 2024, the <em>Journal of Science and Medicine in Sport</em> introduced a rule requiring authors of single-sex studies to provide explicit justification for excluding one gender. Male-only studies were still published in 2024, but the trajectory is shifting. By 2025, new female-focused studies are not just filling a gap; they are redefining the research agenda.
+
+<br></br>
+<a style={{fontSize:"0.8em"}} href="https://pubmed.ncbi.nlm.nih.gov/38879218/" target="_blank">
+Addressing female underrepresentation in sport & exercise-related research: JSAMS policy for submitted studies (& subsequent considerations), 2024
+</a>
+    <p>
+Cold plunges may have gone viral for their universal appeal, but the science shows us they are not universal, or not yet. The question now is whether research can keep pace with practice—whether the next wave of studies will reflect the people actually stepping into the ice bath.
+
+    </p>
+        
+        </>}/>
+      <footer style={{width:"100%", height:"30vh", backgroundColor:"#dfeeffff", paddingTop:"20px"}}>
+            by Jooyoung | Visit my <a href="https://zoo-zer0.github.io/">portfolio</a>
+      </footer>
     </>
     
   )

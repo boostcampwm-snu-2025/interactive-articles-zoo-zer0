@@ -231,7 +231,7 @@ export default function SourcesVisualization({ data, step }) {
 
   return (
     <div style={{ display:"flex", alignItems:"center", justifyContent:"center", width: "100%", height: "100vh" }}>
-      <svg ref={svgRef} width={W} height={H} style={{ border: '1px solid #ddd' }} />
+      <svg ref={svgRef} width={W} height={H} style={{ }} />
       <div
         ref={tooltipRef}
         style={{

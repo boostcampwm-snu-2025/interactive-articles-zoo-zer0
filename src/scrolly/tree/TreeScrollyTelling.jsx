@@ -125,6 +125,12 @@ const TreeScrollyTelling = () =>{
     return(
         <div className="scrolly">
             <div className="sticky">
+                <p style={{fontSize:"0.7em",margin:"-1em"}}><em>
+                Hover over a <strong>dot</strong> to see its source.
+                <br></br>Hover over a <strong>line</strong> to read the quoted citation.
+                <br></br><strong>Click</strong> to visit source website.
+                </em></p>
+
                 <TreeVisualization data={data} focusStep={activeStep != null ? stepsData[activeStep].source : null} focusType={activeStep != null ? stepsData[activeStep].focus : null} />
             </div>
             <div className="scrolly-narrative">

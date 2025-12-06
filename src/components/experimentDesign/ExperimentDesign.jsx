@@ -109,18 +109,18 @@ export default function ExperimentDesign({ data, gendered=true }) {
     const init = [];
     let dotId = 0;
     Object.entries(cellGroups).forEach(([key, studiesInCell]) => {
-        studiesInCell.sort((a, b) => {
-            const perA = a.study.per_women;
-            const perB = b.study.per_women;
-            
-            // Put nulls at the end
-            if (perA == null && perB == null) return 0;
-            if (perA == null) return 1;
-            if (perB == null) return -1;
-            
-            // Sort by per_women descending (highest first)
-            return perB - perA;
-        });
+    studiesInCell.sort((a, b) => {
+        const perA = a.study.per_women;
+        const perB = b.study.per_women;
+        
+        // Put nulls at the end
+        if (perA == null && perB == null) return 0;
+        if (perA == null) return 1;
+        if (perB == null) return -1;
+        
+        // Sort by per_women descending (highest first)
+        return perA - perB;
+      });
       studiesInCell.forEach((item, indexInCell) => {
         init.push({
           id: dotId++,
@@ -272,7 +272,12 @@ export default function ExperimentDesign({ data, gendered=true }) {
       })
       .on("mouseout", function(event,d){
         hideTooltip()
-      });
+      })
+      .on("click", function(event, d) {
+              if (d.study?.link) {
+                window.open(d.study.link, "_blank");
+              }
+            });
 
     // X-axis labels (Effect)
     EFFECT_ORDER.forEach((effect, i) => {

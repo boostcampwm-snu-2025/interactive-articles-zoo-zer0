@@ -70,6 +70,20 @@
     color:aliceblue;
     display: inline-block;
 }
+.highlight.gray{
+    background-color: #757575; /* Gray for neutral */
+}
+.highlight.boy-blue{
+    background-color: #a7e3ffff;
+    color:black;
+}
+.highlight.girl-pink{
+    background-color: #b80090;
+}
+.highlight.orange{
+    background-color: #ffaf80ff;
+    color: black;
+}
 
 
 @keyframes logo-spin {
