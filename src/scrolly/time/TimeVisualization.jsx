@@ -156,6 +156,7 @@ const TimeVisualization = ({ activeStep }) => {
   }, []);
 
   // Handle step highlighting
+// Handle step highlighting
   useEffect(() => {
     if (!svgRef.current || rectsRef.current.length === 0) return;
 
@@ -171,19 +172,19 @@ const TimeVisualization = ({ activeStep }) => {
     } else if (activeStep === 2) {
       targets = rectsRef.current.filter(r => r.data.Year === 2009);
     } else if (activeStep === 3) {
-      targets = rectsRef.current.filter(r => r.data.Year === 2009);
+      targets = rectsRef.current.filter(r => r.data.PMID === "19370271");
     } else if (activeStep === 4) {
-      targets = rectsRef.current.filter(r => r.data.Year === 2009);
+      targets = rectsRef.current.filter(r => r.data.PMID === "19370271");
     } else if (activeStep === 5) {
       targets = rectsRef.current.filter(r => r.data.Year >= 2020 && r.data.Year <= 2025);
     } else if (activeStep === 6) {
-      targets = rectsRef.current.filter(r => r.data.Year === 2025);
+      targets = rectsRef.current.filter(r => r.data.PMID === "40333546");
     } else if (activeStep === 7) {
-      targets = rectsRef.current.filter(r => r.data.Year === 2025);
+      targets = rectsRef.current.filter(r => r.data.PMID === "39665595");
     } else if (activeStep === 8) {
-      targets = rectsRef.current.filter(r => r.data.Year === 2020);
+      targets = rectsRef.current.filter(r => r.data.PMID === "31677292");
     } else if (activeStep === 9) {
-      targets = rectsRef.current.filter(r => r.data.Year === 2020);
+      targets = rectsRef.current.filter(r => r.data.PMID === "31677292");
     } else if (activeStep === 10) {
       targets = rectsRef.current.filter(r => r.data.Year === 2020);
     }
@@ -191,11 +192,11 @@ const TimeVisualization = ({ activeStep }) => {
     targets.forEach(r => {
       const bbox = r.el.node().getBBox();
       svg.insert("rect", ":first-child")
-        .attr("x", bbox.x - 3)
-        .attr("y", bbox.y - 3)
-        .attr("width", bbox.width + 6)
-        .attr("height", bbox.height + 6)
-        .attr("fill", "#fff88f")
+        .attr("x", bbox.x - 5)
+        .attr("y", bbox.y - 5)
+        .attr("width", bbox.width + 10)
+        .attr("height", bbox.height + 10)
+        .attr("fill", "#fff350ff")
         .attr("class", "highlight-box");
     });
   }, [activeStep]);
