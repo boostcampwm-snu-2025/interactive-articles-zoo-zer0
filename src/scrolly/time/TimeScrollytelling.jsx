@@ -88,7 +88,7 @@ Effect of cold-water immersion treatment on recovery from exercise-induced muscl
         {id: 8, 
             content:(<>
             <p>
-This trend of acknowledgement seems to have started in <span class = "highlight">2020,</span> by a study comparing the effect of various methods of cold therapy on muscle recovery in females. 
+This trend of acknowledgement seems to have started in <span className = "highlight">2020,</span> by a study comparing the effect of various methods of cold therapy on muscle recovery in females. 
 <br></br>“To our knowledge, no study has examined the physiological responses or the recovery between PBC, CWI, and a control treatment in females. This is consistent with the <strong>significantly under‐represented female participants in the wider sport and exercise medicine literature.”</strong>
 </p>
             <p style={{fontSize:"0.8em"}}>
