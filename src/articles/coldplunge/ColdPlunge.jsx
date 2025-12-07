@@ -1,13 +1,12 @@
-import { useState } from 'react'
-import './App.css'
-import Narrative from './Narrative'
+import './styles.css'
+import Narrative from './components/Narrative'
 import Hero from './components/Hero'
 import experimentdata from './components/experimentDesign/data.json'
 import ExperimentDesign from './components/experimentDesign/ExperimentDesign'
-import TreeScrollyTelling from './scrolly/tree/TreeScrollyTelling'
-import SourcesScrollytelling from './scrolly/sources/SourcesScrollytelling'
-import TimeScrollytelling from './scrolly/time/TimeScrollytelling'
-function App() {
+import TreeScrollyTelling from './components/scrolly/tree/TreeScrollyTelling'
+import SourcesScrollytelling from './components/scrolly/sources/SourcesScrollytelling'
+import TimeScrollytelling from './components/scrolly/time/TimeScrollytelling'
+function ColdPlunge() {
 
   return (
     <>
@@ -188,4 +187,4 @@ Cold plunges may have gone viral for their universal appeal, but the science sho
   )
 }
 
-export default App
+export default ColdPlunge

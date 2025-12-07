@@ -201,8 +201,8 @@ export default function ExperimentDesign({ data, gendered=true }) {
           .attr("width", cellSize)
           .attr("height", cellSize)
           .attr("fill", gendered ? "none" : count >0 ? heatmapColorScale(count/maxCount):"#f9f9f9")
-          .attr("stroke", "#3f3f3fff")
-          .attr("stroke-width", 0.1);
+          .attr("stroke", "#abababff")
+          .attr("stroke-width", 1);
                 
         // Add count text in bottom right corner
         if (count > 0 && !gendered) {
@@ -222,22 +222,24 @@ export default function ExperimentDesign({ data, gendered=true }) {
     }
 
     // Draw dots
-    g.selectAll("circle")
+    g.selectAll("#rect-studies")
       .data(vizData)
-      .join("circle")
-      .attr("cx", d => {
+      .join("rect")
+      .attr("class", "rect-studies")
+      .attr("x", d => {
         const pos = getStudyPosition(d.method, d.effect);
         if (!pos) return 0;
         const cell = indexToCellPosition(d.indexInCell, pos.baseX, pos.baseY);
-        return cell.x;
+        return cell.x-blockSize/2+0.5;
       })
-      .attr("cy", d => {
+      .attr("y", d => {
         const pos = getStudyPosition(d.method, d.effect);
         if (!pos) return 0;
         const cell = indexToCellPosition(d.indexInCell, pos.baseX, pos.baseY);
-        return cell.y;
+        return cell.y-blockSize/2+0.5;
       })
-      .attr("r", blockSize / 2.5)
+      .attr("width", blockSize-1)
+      .attr("height", blockSize-1)
         .attr("fill", d => {
         if (!gendered) return "#ffffffd5";   // color OFF → always gray
         return d.study?.per_women != null

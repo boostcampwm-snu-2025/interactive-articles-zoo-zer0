@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import data from "./data.json";
 
 const TimeVisualization = ({ activeStep }) => {
   const svgRef = useRef(null);
@@ -26,7 +27,6 @@ const TimeVisualization = ({ activeStep }) => {
     }
 
     // Load and process data
-    d3.json("data.json").then(data => {
       data.forEach(d => {
         d.Year = +d.Year;
         d.perWomen = d['per women'] == null ? null : +d['per women'];
@@ -126,7 +126,7 @@ const TimeVisualization = ({ activeStep }) => {
           rects.push({el: rect, data: study});
           stackPos++;
         });
-      });
+      
 
       rectsRef.current = rects;
 

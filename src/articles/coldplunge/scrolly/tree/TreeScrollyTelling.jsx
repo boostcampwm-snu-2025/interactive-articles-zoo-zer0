@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Scrollama, Step } from 'react-scrollama';
+import { useState, useEffect, useRef } from "react";
 import TreeVisualization from "./TreeVisualization";
 import data from "./data.json";
-
-const TreeScrollyTelling = () =>{
+import { Scrolly, ScrollyStep } from "../../Scrolly";
+const TreeScrollyTelling = () => {
     
     const [activeStep, setActiveStep] = useState(null);
+ 
     const stepsData = [
         { id: 0, focus: "node", source: 0, //joseon
             content: (
@@ -44,7 +44,7 @@ const TreeScrollyTelling = () =>{
             content: (
                 <>
                     <p>
-                        <a href="">EveryDay Health</a>’s article considers both the benefits and potential harms of cold plunging, but leans more <span style={{backgroundColor:"#26a02a"}} className= "highlight">positive.</span>
+                        <a href="">EveryDay Health</a>'s article considers both the benefits and potential harms of cold plunging, but leans more <span style={{backgroundColor:"#26a02a"}} className= "highlight">positive.</span>
                     </p>
                     <p>
                         For example, it mentions benefits such as reduced pain and fatigue, and improved recovery after high-intensity exercise.
@@ -75,7 +75,7 @@ const TreeScrollyTelling = () =>{
                         the pinker the dot, the greater the female participation rate.
                     </p>
                     <p>
-                        You’ll notice a sea of blue dots. Out of those 52 studies, I had access to 32 trials. And out of those 32 trials, 
+                        You'll notice a sea of blue dots. Out of those 52 studies, I had access to 32 trials. And out of those 32 trials, 
                         <br></br>
                         <strong><span className="highlight">22</span> excluded women entirely.</strong>
                     </p>
@@ -95,7 +95,7 @@ const TreeScrollyTelling = () =>{
             content: (
                 <>
                 <p>
-                    Let’s look at the 2025 review article looking into the doses of cold water immersion, which analyzes 55 studies. I could access 31 trials. 
+                    Let's look at the 2025 review article looking into the doses of cold water immersion, which analyzes 55 studies. I could access 31 trials. 
                 </p>
                 <p>
                     And out of those 31 trials, <span className="highlight">23</span> excluded women entirely.
@@ -116,10 +116,8 @@ const TreeScrollyTelling = () =>{
             content:(<></>)
         }
     ];
-    
-    const onStepEnter = ({ data })=>{
+    const onStepEnter = ({ data }) => {
         setActiveStep(data);
-        console.log(data);
     };
 
     return(
@@ -132,21 +130,28 @@ const TreeScrollyTelling = () =>{
                 </em>
                 </p>
 
-                <TreeVisualization data={data} focusStep={activeStep != null ? stepsData[activeStep].source : null} focusType={activeStep != null ? stepsData[activeStep].focus : null} />
+                <TreeVisualization 
+                    data={data} 
+                    focusStep={activeStep != null ? stepsData[activeStep].source : null} 
+                    focusType={activeStep != null ? stepsData[activeStep].focus : null} 
+                />
             </div>
             <div className="scrolly-narrative">
-                <Scrollama offset={0.5} onStepEnter={onStepEnter}>
-                    {stepsData.map((step, index)=>(
-                        <Step data={index} key={index}>
-                            <div className= {activeStep === index ? "scroll-box active" : "scroll-box"} id={index===9 ? "throwaway":""}>
+                <Scrolly offset={0.5} onStepEnter={onStepEnter}>
+                    {stepsData.map((step, index) => (
+                        <ScrollyStep data={index} key={index}>
+                            <div 
+                                className={activeStep === index ? "scroll-box active" : "scroll-box"} 
+                                id={index === 9 ? "throwaway" : ""}
+                            >
                                 {step.content}
                             </div>
-                        </Step>
+                        </ScrollyStep>
                     ))}
-                    
-                </Scrollama>
+                </Scrolly>
             </div>     
         </div>
     )
 }
+
 export default TreeScrollyTelling;

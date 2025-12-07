@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Scrollama, Step } from 'react-scrollama';
 import SourcesVisualization from "./SourcesVisualization";
 import data from "./data.json";
-
+import { Scrolly, ScrollyStep } from "../../Scrolly";
 const SourcesScrollytelling = () =>{
     
     const [activeStep, setActiveStep] = useState(null);
@@ -75,7 +74,6 @@ const SourcesScrollytelling = () =>{
     
     const onStepEnter = ({ data })=>{
         setActiveStep(data);
-        console.log(data);
     };
 
     return(
@@ -83,17 +81,19 @@ const SourcesScrollytelling = () =>{
             <div className="sticky">
                 <SourcesVisualization data={data} step={activeStep != null ? stepsData[activeStep].id : null}/>
             </div>
-            <div className="scrolly-narrative center">
-                <Scrollama offset={0.4} onStepEnter={onStepEnter}>
-                    {stepsData.map((step, index)=>(
-                        <Step data={index} key={index}>
-                            <div className= {activeStep === index ? "scroll-box active" : "scroll-box"} id={index===5 ? "throwaway":""}>
+            <div className="scrolly-narrative">
+                <Scrolly offset={0.5} onStepEnter={onStepEnter}>
+                    {stepsData.map((step, index) => (
+                        <ScrollyStep data={index} key={index}>
+                            <div 
+                                className={activeStep === index ? "scroll-box active" : "scroll-box"} 
+                                id={index === 9 ? "throwaway" : ""}
+                            >
                                 {step.content}
                             </div>
-                        </Step>
+                        </ScrollyStep>
                     ))}
-                    
-                </Scrollama>
+                </Scrolly>
             </div>     
         </div>
     )

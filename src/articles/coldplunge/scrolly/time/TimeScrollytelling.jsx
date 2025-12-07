@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Scrollama, Step } from 'react-scrollama';
+import { Scrolly, ScrollyStep } from "../../Scrolly";
 import TimeVisualization from "./TimeVisualization";
 
 const TimeScrollytelling = () =>{
@@ -118,9 +118,8 @@ Partial-body cryotherapy (-135°C) and cold-water immersion (10°C) after muscle
         },
     ];
     
-    const onStepEnter = ({ data })=>{
+    const onStepEnter = ({ data }) => {
         setActiveStep(data);
-        console.log(data);
     };
 
     return(
@@ -130,16 +129,18 @@ Partial-body cryotherapy (-135°C) and cold-water immersion (10°C) after muscle
                 <TimeVisualization activeStep={activeStep != null ? stepsData[activeStep].id : null} />
             </div>
             <div className="scrolly-narrative">
-                <Scrollama offset={0.4} onStepEnter={onStepEnter}>
-                    {stepsData.map((step, index)=>(
-                        <Step data={index} key={index}>
-                            <div className= {activeStep === index ? "scroll-box active" : "scroll-box"} id={index===11 ? "throwaway":""}>
+                <Scrolly offset={0.5} onStepEnter={onStepEnter}>
+                    {stepsData.map((step, index) => (
+                        <ScrollyStep data={index} key={index}>
+                            <div 
+                                className={activeStep === index ? "scroll-box active" : "scroll-box"} 
+                                id={index === 11 ? "throwaway" : ""}
+                            >
                                 {step.content}
                             </div>
-                        </Step>
+                        </ScrollyStep>
                     ))}
-                    
-                </Scrollama>
+                </Scrolly>
             </div>     
         </div>
     )
