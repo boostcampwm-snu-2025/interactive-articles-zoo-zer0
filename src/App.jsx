@@ -1,22 +1,20 @@
 import { useRef, useState, useEffect } from "react";
 
 import './App.css'
-import TimeScrollytelling from "./articles/coldplunge/components/scrolly/time/TimeScrollytelling";
-import TreeScrollyTelling from "./articles/coldplunge/components/scrolly/tree/TreeScrollyTelling";
-import TreeVisualization from "./articles/coldplunge/components/scrolly/tree/TreeVisualization";
-import treeData from './articles/coldplunge/components/scrolly/tree/data.json'
-import TimeVisualization from "./articles/coldplunge/components/scrolly/time/TimeVisualization";
-import ExperimentDesign from "./articles/coldplunge/components/experimentDesign/ExperimentDesign";
-import experimentData from './articles/coldplunge/components/experimentDesign/data.json'
-import Week1 from "./pages/week1";
+import { Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
 import ColdPlunge from "./articles/coldplunge/ColdPlunge";
+import Week1 from "./articles/Week1";
 function App() {
 
   return (
-    <>
-    <ColdPlunge />
-
-    </>
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/articles/cold-plunge" element={<ColdPlunge />} />
+        <Route path="/articles/week-1" element={<Week1 />} />
+      </Routes>
+    </div>
   )
 }
 

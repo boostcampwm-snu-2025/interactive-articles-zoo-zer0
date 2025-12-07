@@ -266,7 +266,7 @@ linkLabel.each(function(d) {
     //show labels
    function showLinkLabel(id){
       
-      d3.select(`#edge-label-${id}`)// match the same data
+      d3.selectAll(`#edge-label-${id}`)// match the same data
         .transition().duration(1200)  
         //.style("opacity",1);
       .attr("display", "block")
@@ -274,7 +274,7 @@ linkLabel.each(function(d) {
     }    
     function showNodeLabel(id){
       
-      d3.select(`#node-label-${id}`)// match the same data
+      d3.selectAll(`#node-label-${id}`)// match the same data
         .transition().duration(1200)  
         //.style("opacity",1);
         .attr("display", "block")
@@ -333,7 +333,7 @@ linkLabel.each(function(d) {
     links
       .on("mouseover", function (event, d) {
         // Make the top stroke thicker
-        d3.select(`#edge-stroke-${d.target.data.id}`)// match the same data
+        d3.selectAll(`#edge-stroke-${d.target.data.id}`)// match the same data
           .attr("stroke-width", 4.5);
 
         const sentiment = d.target.data.sentiment || "N/A";
@@ -347,7 +347,7 @@ linkLabel.each(function(d) {
       .on("mousemove", moveTooltip)
       .on("mouseout", function (event, d) {
         // Reset top stroke width
-        d3.select(`#edge-stroke-${d.target.data.id}`)// match the same data
+        d3.selectAll(`#edge-stroke-${d.target.data.id}`)// match the same data
           .attr("stroke-width", 1.5); // match original stroke width
 
         hideTooltip();
@@ -580,6 +580,13 @@ linkLabel.each(function(d) {
     if (!findNodeById) return;
 
     // Handle special "allReviews" case
+    if (focusStep === "reflection") {
+        hideLabels();
+        adjustTreeHeight(4);
+        const transform = transformEdge(root, 0, 3, 0);
+        svg.call(zoom.transform, d3.zoomIdentity.translate(transform.tx, transform.ty).scale(transform.scale))
+
+    }
     if (focusStep === "allReviews") {
       hideLabels();
       adjustTreeHeight(4);

@@ -1,4 +1,5 @@
-import './styles.css'
+import './ColdPlunge.css'
+import { Link } from 'react-router-dom'
 import Narrative from './components/Narrative'
 import Hero from './components/Hero'
 import experimentdata from './components/experimentDesign/data.json'
@@ -10,6 +11,9 @@ function ColdPlunge() {
 
   return (
     <>
+      <nav className="article-nav">
+        <Link to="/" className="back-button">← Back to Home</Link>
+      </nav>
       <Hero />
       <Narrative content={
         <>
