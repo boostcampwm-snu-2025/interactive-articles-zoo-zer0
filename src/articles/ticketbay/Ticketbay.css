@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=Merriweather:wght@300;400;700;900&display=swap');
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* Always light theme */
+  color: #213547;
+  background-color: #ffffff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* Paragraphs and general body text → Merriweather */
+.dropcap {
+  float: left;
+  font-weight: 900;
+  font-size: 3rem;                      /* adjust */
+  line-height: 0.8;
+  padding-right: 0.1em;
+  padding-top: 0.05em;
+}
+
+body, p {
+  font-family: 'Merriweather', serif;
+  font-size: 16px;
+  font-weight:500;
+}
+
+/* Headers and titles → DM Sans Black (900) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 900;
+}
+
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #747bff;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+#root {
+  margin: 0 auto;
+  font-family: 'DM Sans', sans-serif;
+  width: 100%;
+  text-align: center;
+  align-items: center;    /* center horizontally */
+}
+#tooltip {
+    position: absolute;
+    visibility: hidden;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    pointer-events: none;
+    font-size: 12px;
+    text-align: left;
+    z-index:20;
+}
+
+#tooltip-selected {
+    position: absolute;
+    visibility: hidden;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    pointer-events: none;
+    font-size: 12px;
+    text-align: left;
+    z-index: 10;
+}
+
+
+.scrolly_narrative_left {
+  position: relative;
+}
+.scrolly_narrative_center {
+  position: relative;
+  justify-items: center;
+}
+
+.sticky_right {
+  position:-webkit-sticky;
+  position: sticky;
+  top: 50px;
+  justify-self: right;
+}
+
+.scrollyStadium {
+  transform: scale(1);
+  transform-origin: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+.conclusion {
+  position: relative;
+  padding-bottom: 100px;
+  background-color: #000000; /* solid fill inside */
+  color: rgb(228, 228, 228);
+  z-index: 0;
+}
+
+/* Gradient overlay for the "margin" area */
+.conclusion::before {
+  content: "";
+  position: absolute;
+  top: -20%;      /* matches your margin-top */
+  left: 0;
+  right: 0;
+  height: 20%;    /* gradient height */
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #000000);
+  z-index: -1;    /* behind the box */
+}
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
