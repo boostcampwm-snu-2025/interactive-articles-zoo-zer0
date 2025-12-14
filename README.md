@@ -1,3 +1,84 @@
+[] reorganize file structure
+├── public/
+│   ├── coldplunge
+│   │   
+│   ├── week1
+├── src/
+|   ├── app/
+│   │   ├── App.jsx
+│   │   ├── routes.jsx
+│   │   ├── providers.jsx
+|   ├── components/ (site-wide, reusable)
+│   │   ├── Header.jsx
+│   │   ├── Footer.jsx
+│   │   ├── CoverStory.jsx
+│   │   ├── EditorsPicks.jsx
+│   │   ├── RecentStories.jsx
+|   ├── patterns/
+|   |   ├── Hero.jsx
+│   │   └── Scrolly.jsx
+│   ├── pages/
+|   |   ├── Home/
+│   │   │   ├── Home.jsx
+│   │   │   ├── Home.css
+│   │   ├── ArticlePage.jsx (generic article wrapper)
+
+│   ├── articles/
+│   │   ├── cold-plunge/
+│   │   │   ├── index.jsx (entry point)
+│   │   │   ├── meta.js
+│   │   │   ├── ColdPlunge.css
+│   │   │   ├── sections/
+│   │   │   │   ├── experimentDesign
+│   │   │   │   │   ├── data.json
+│   │   │   │   │   └── ExperimentDesign.jsx
+│   │   │   │   ├── visuals/
+│   │   │   │   │   ├── sources
+│   │   │   │   │   │   ├── data.json
+│   │   │   │   │   │   ├── SourcesScrollytelling.jsx
+│   │   │   │   │   │   └── SourcesVisualization.jsx
+│   │   │   │   │   ├── time
+│   │   │   │   │   │   ├── data.json
+│   │   │   │   │   │   ├── TimeScrollytelling.jsx
+│   │   │   │   │   │   └── TimeVisualization.jsx
+│   │   │   │   │   └── tree
+│   │   │   │   │       ├── data.json
+│   │   │   │   │       ├── TreeScrollyTelling.jsx
+│   │   │   │   │       └── TreeVisualization.jsx
+│   │   │   ├── ColdPlunge.css
+│   │   │   └── ColdPlunge.jsx
+│   │   └── week-1
+│   │   │   ├── index.jsx
+│   │   │   ├── meta.js
+│   ├── data/
+│   |   ├── author.js
+│   |   ├── articles.js
+│   ├── styles/
+
+
+
+
+
+
+│   ├── assets
+│   │   └── react.svg
+│   ├── pages
+│   │   ├── Home.css
+│   │   └── Home.jsx
+│   ├── App.css
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── README.md
+└── vite.config.js
+
+
+
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
