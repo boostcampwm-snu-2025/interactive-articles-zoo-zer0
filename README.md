@@ -1,7 +1,6 @@
 
 ## 회고록
 
-https://github.com/user-attachments/assets/0ee7f46e-a4bb-426f-875c-67fcc6996297
 
 
 ~~https://interactive-articles-zoo-zer0.vercel.app/~~
