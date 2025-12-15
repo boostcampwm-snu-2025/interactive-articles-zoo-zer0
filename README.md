@@ -1,91 +1,27 @@
-<<<<<<< HEAD
-[] reorganize file structure
-├── public/
-│   ├── coldplunge
-│   │   
-│   ├── week1
-├── src/
-|   ├── app/
-│   │   ├── App.jsx
-│   │   ├── routes.jsx
-│   │   ├── providers.jsx
-|   ├── components/ (site-wide, reusable)
-│   │   ├── Header.jsx
-│   │   ├── Footer.jsx
-│   │   ├── CoverStory.jsx
-│   │   ├── EditorsPicks.jsx
-│   │   ├── RecentStories.jsx
-|   ├── patterns/
-|   |   ├── Hero.jsx
-│   │   └── Scrolly.jsx
-│   ├── pages/
-|   |   ├── Home/
-│   │   │   ├── Home.jsx
-│   │   │   ├── Home.css
-│   │   ├── ArticlePage.jsx (generic article wrapper)
+## 데모 영상
+https://youtu.be/h8jGfhNKUQs
 
-│   ├── articles/
-│   │   ├── cold-plunge/
-│   │   │   ├── index.jsx (entry point)
-│   │   │   ├── meta.js
-│   │   │   ├── ColdPlunge.css
-│   │   │   ├── sections/
-│   │   │   │   ├── experimentDesign
-│   │   │   │   │   ├── data.json
-│   │   │   │   │   └── ExperimentDesign.jsx
-│   │   │   │   ├── visuals/
-│   │   │   │   │   ├── sources
-│   │   │   │   │   │   ├── data.json
-│   │   │   │   │   │   ├── SourcesScrollytelling.jsx
-│   │   │   │   │   │   └── SourcesVisualization.jsx
-│   │   │   │   │   ├── time
-│   │   │   │   │   │   ├── data.json
-│   │   │   │   │   │   ├── TimeScrollytelling.jsx
-│   │   │   │   │   │   └── TimeVisualization.jsx
-│   │   │   │   │   └── tree
-│   │   │   │   │       ├── data.json
-│   │   │   │   │       ├── TreeScrollyTelling.jsx
-│   │   │   │   │       └── TreeVisualization.jsx
-│   │   │   ├── ColdPlunge.css
-│   │   │   └── ColdPlunge.jsx
-│   │   └── week-1
-│   │   │   ├── index.jsx
-│   │   │   ├── meta.js
-│   ├── data/
-│   |   ├── author.js
-│   |   ├── articles.js
-│   ├── styles/
+## 회고록
+
+
+
+~~https://interactive-articles-zoo-zer0.vercel.app/~~
+
+https://interactive-articles-test.vercel.app/
+
+- 인터렉티브 요소가 들어간 기사 2개 올림 (하나는 프로젝트 기간 동안 만들었고 하나는 예전에 만든거 페이지에 맞게 수정).
+- 인터렉티브 + 마크다운 형식으로 기사 작성 가능. 
+## 
+만약 새로운 기사를 작성하고 싶으면:
+1) create a new folder <br>
+2) add article.md and meta.js<br>
+3) write the article<br>
+4) register it in articles.js<br>
+(간단하게 올릴 수 있음)
 
 
 
 
-
-
-│   ├── assets
-│   │   └── react.svg
-│   ├── pages
-│   │   ├── Home.css
-│   │   └── Home.jsx
-│   ├── App.css
-│   ├── App.jsx
-│   ├── index.css
-│   └── main.jsx
-├── eslint.config.js
-├── index.html
-├── package-lock.json
-├── package.json
-├── README.md
-└── vite.config.js
-
-
-
-
-# React + Vite
-=======
-# Interactive Articles
->>>>>>> refs/remotes/origin/main
-
-## 1주차 회고
-https://interactive-articles-zoo-zer0.vercel.app/
 ## 서비스 목적
-재미 없을 수도 있는 데이터 관련 기사를 인터랙티브하고 미적으로 아름답게 전달하기.
+재미 없을 수도 있는 데이터 관련 기사를 인터랙티브하고 미적으로 아름답게 전달하기. 새로운 기사 작성하기 편리하게 만들기. 
+

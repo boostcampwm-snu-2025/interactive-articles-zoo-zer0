@@ -6,7 +6,7 @@ import ScrollytellingStadium from './sections/StadiumInteractive/ScrollytellingS
 import TimeScrollytelling from './sections/TimeScrolly/TimeScrolly.tsx';
 import SusScrolly from './sections/TimeSus/Sus.Scrolly.tsx';
 import Footer from './sections/Footer.tsx';
-import Toggle from './assets/Toggle.tsx';
+import Toggle from '../../components/Toggle.tsx';
 import QuoteBox from './assets/QuoteBox.tsx';
 import Hero from './sections/Hero.tsx';
 import { ToggleClean } from './sections/Top10Toggles.tsx';

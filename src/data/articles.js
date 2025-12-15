@@ -7,6 +7,10 @@ import TestArticleMd from "../articles/test/article.md?raw";
 import Week1 from "../articles/week-1";
 import week1Meta from "../articles/week-1/meta";
 
+import Week2 from "../articles/week-2";
+import week2Meta from "../articles/week-2/meta";
+
+
 import Tickets from "../articles/ticketbay";
 import ticketsMeta from "../articles/ticketbay/meta";
 import { Component } from "react";
@@ -18,6 +22,10 @@ export const articles = [
   {
     ...week1Meta,
     Component: Week1
+  },
+  {
+    ...week2Meta,
+    Component: Week2
   },
   {
     ...TestArticleMeta,
